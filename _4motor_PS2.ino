@@ -3,6 +3,8 @@
 #include <Servo.h>
 #include <PS2X_lib.h>  //for v1.6
 
+#define M_PI 3.1415926535897932384
+
 #include "wheelbase.h"
 #include "controler.h"
 #include "eyes.h"
@@ -27,11 +29,44 @@ void setup()
   initController();
 }
 
+bool turned = false;
+
 void loop()
 {
-	JOY_DIRECTION dir = updateController();
-	MotorUpdate(dir);
+	MotorUpdate(updateController());
 	delay(50);
+
+	// turn left
+	if (!turned) {
+		delay(2000);
+		turnRight(M_PI / 2);
+		delay(2000);
+		turnLeft(M_PI / 2);
+		delay(2000);
+		turnRight(M_PI);
+		turned = true;
+	}
+}
+
+
+JOY_DIRECTION turnLeftDir = {-255, 255};
+JOY_DIRECTION turnRightDir = {255, -255};
+JOY_DIRECTION turnStopDir = {0, 0};
+int turnTimeForPiAngle = 1000; // time to turn into Pi angle in miliseconds
+
+
+void turnLeft(float angle) {
+	MotorUpdate(turnLeftDir);
+	int delayInterval = (int) turnTimeForPiAngle / M_PI * angle;
+	delay(delayInterval);
+	MotorUpdate(turnStopDir);
+}
+
+void turnRight(float angle) {
+	MotorUpdate(turnRightDir);
+	int delayInterval = (int) turnTimeForPiAngle / M_PI * angle;
+	delay(delayInterval);
+	MotorUpdate(turnStopDir);
 }
 
 

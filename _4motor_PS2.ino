@@ -67,11 +67,9 @@ void loop()
 	Serial.print(":");
 	Serial.print(jState.right);
 
+	// do not do anything if user takes control with joystick
 	if (jState.left || jState.right) {
 		MotorUpdate(jState);
-
-
-		startTime = millis();
 
 		// reset eyes and sensor
 		myservo.write(eyePos);
@@ -79,7 +77,11 @@ void loop()
 		m = 40;
 
 		Serial.println(" - Joystick active");
-		return; // do not do anything if user takes control with joystick
+
+		// set last time when joystick was active
+		startTime = millis();
+
+		return;
 	}
 
 	// STOP after joystick becomes inactive

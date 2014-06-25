@@ -70,64 +70,31 @@ JOY_DIRECTION updateController() {
 	//DualShock Controller
 	ps2x.read_gamepad(false, PS2vibrate); //read controller and set large motor to spin at 'vibrate' speed
 
-	/* Serial.print("Stick Values:");
-	Serial.print(ps2x.Analog(PSS_LY), DEC); //Left stick, Y axis. Other options: LX, RY, RX
-	Serial.print(",");
-	Serial.print(ps2x.Analog(PSS_LX), DEC);
-	Serial.print(",");
-	Serial.print(ps2x.Analog(PSS_RY), DEC);
-	Serial.print(",");
-	Serial.println(ps2x.Analog(PSS_RX), DEC);
-   */
-
-	//speed = (unsigned char)ps2x.Analog(PSS_LY);
-	//Serial.print("Got ");
-	//Serial.print(speed);
-	//Serial.println("");
-
 	if (LYstate != (unsigned char)ps2x.Analog(PSS_LY)) {
-	  //Serial.println("Change L speed");
 	  LYstate = (unsigned char)ps2x.Analog(PSS_LY);
 	  if ((LYstate == 127) || (LYstate == 128)) {
-		//Serial.println("L stop");
-		// robotL.motor_forward(0,0);
 		joyDir.left = 0;
 	  } else if (LYstate < 127) {
 		speed = 255 - LYstate;
-		// robotL.motor_forward(0,speed);
 		joyDir.left = speed;
 	  } else {
 		speed = LYstate;
-		// robotL.motor_back(0,speed);
 		joyDir.left = -1 * speed;
 	  }
 	}
 
 	if (RYstate != (unsigned char)ps2x.Analog(PSS_RY)) {
-	  //Serial.println("Change R speed");
-	  //Serial.print("Got ");
 	  RYstate = (unsigned char)ps2x.Analog(PSS_RY);
-	  //Serial.println(RYstate);
 	  if ((RYstate == 127) || (RYstate == 128)) {
-		//Serial.println("R stop");
-		// robotR.motor_forward(0,0);
 		joyDir.right = 0;
 	  } else if (RYstate < 127) {
 		speed = 255 - RYstate;
-		// robotR.motor_forward(0,speed);
 		joyDir.right = speed;
 	  } else {
 		speed = RYstate;
-		// robotR.motor_back(0,speed);
 		joyDir.right = -1 * speed;
 	  }
 	}
-
-	/*
-	Serial.print(joyDir.left); //Left stick, Y axis. Other options: LX, RY, RX
-	Serial.print(",");
-	Serial.println(joyDir.right);
-	*/
 
 	return joyDir;
 }
